@@ -1,21 +1,72 @@
+console.log("javascript is loaded!")
+
+
 //variables
-var sun = document.getElementById("sunday");
-var mon = document.getElementById("monday");
-var tue = document.getElementById("tuesday");
-var wed = document.getElementById("wednesday");
-var thur = document.getElementById("thursday");
-var fri = document.getElementById("friday");
-var sat = document.getElementById("saturday");
+var nine = document.getElementById("hour-9");
+var ten = document.getElementById("hour-10");
+var eleven = document.getElementById("hour-11");
+var twelve = document.getElementById("hour-12");
+var thirteen = document.getElementById("hour-13");
+var fourteen = document.getElementById("hour-14");
+var fifteen = document.getElementById("hour-15");
+var sixteen = document.getElementById("hour-16");
+var seventeen = document.getElementById("hour-17");
+
+
 
 //add a click event for each button so that you are able to click on that section of that day to add whatever you would like to
-
-
-
-
-
-//add functions to be able to help save in the correct day 
-
-
-
-
-//use local storage to save all items for that week
+$(document).ready(function() {
+    // listen for save button clicks
+    $(".saveBtn").on("click", function() {
+      // get nearby values
+      var value = $(this).siblings(".description").val();
+      var time = $(this).parent().attr("id");
+  
+      // save in localStorage
+      localStorage.setItem(time, value);
+    });
+  
+    function hourUpdater() {
+      // get current number of hours
+      var currentHour = moment().hours();
+  
+      // loop over time blocks
+      $(".time-block").each(function() {
+        var blockHour = parseInt($(this).attr("id").split("-")[1]);
+  
+        // check if we've moved past this time
+        if (blockHour < currentHour) {
+          $(this).addClass("past");
+        } 
+        else if (blockHour === currentHour) {
+          $(this).removeClass("past");
+          $(this).addClass("present");
+        } 
+        else {
+          $(this).removeClass("past");
+          $(this).removeClass("present");
+          $(this).addClass("future");
+        }
+      });
+    }
+  
+    hourUpdater();
+  
+    // set up interval to check if current time needs to be updated
+    var interval = setInterval(hourUpdater, 15000);
+  
+    // load any saved data from localStorage
+    $("#hour-9 .description").val(localStorage.getItem("hour-9"));
+    $("#hour-10 .description").val(localStorage.getItem("hour-10"));
+    $("#hour-11 .description").val(localStorage.getItem("hour-11"));
+    $("#hour-12 .description").val(localStorage.getItem("hour-12"));
+    $("#hour-13 .description").val(localStorage.getItem("hour-13"));
+    $("#hour-14 .description").val(localStorage.getItem("hour-14"));
+    $("#hour-15 .description").val(localStorage.getItem("hour-15"));
+    $("#hour-16 .description").val(localStorage.getItem("hour-16"));
+    $("#hour-17 .description").val(localStorage.getItem("hour-17"));
+  
+    // display current day on page
+    $("#currentDay").text(moment().format("dddd, MMMM Do"));
+  });
+  
